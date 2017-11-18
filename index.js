@@ -132,6 +132,63 @@ function orderBeverage(intentRequest, callback) {
 	}));
 }
 
+
+function applyLoan(intentRequest, callback) {
+
+	const outputSessionAttributes = intentRequest.sessionAttributes;
+	const source = intentRequest.invocationSource;
+
+	if (source === 'DialogCodeHook') {
+
+		// perform validation on the slot values we have
+		const slots = intentRequest.currentIntent.slots;
+
+		const loanAmount = (slots.LoanAmount ? slots.LoanAmount : null);
+		const tenure = (slots.Tenure ? slots.Tenure : null);
+		const fullName = (slots.FullName ? slots.FullName : null);
+		const myKadNumber = (slots.MyKadNumber ? slots.MyKadNumber : null);
+		const mobileNumber = (slots.MobileNumber ? slots.MobileNumber : null);
+		const address = (slots.Address ? slots.Address : null);
+		const emailAddress = (slots.EmailAddress ? slots.EmailAddress : null);
+		const grossIncome = (slots.GrossIncome ? slots.GrossIncome : null);
+
+		if (loanAmount && !(parseInt(loanAmount) > 0)) {
+
+			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
+				slots, 'LoanAmount', buildMessage('Sorry, but loan amount must be more than zero.  How much of loan amount would you like?')));
+		}
+
+		if (tenure && !(+tenure > 0)) {
+			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
+				slots, 'Tenure', buildMessage('Sorry, but tenure must be more than zero.  How long of tenure would you like?')));
+		}
+
+		if (grossIncome && !(+grossIncome > 0)) {
+			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
+				slots, 'GrossIncome', buildMessage('Sorry, but gross income must be more than zero.  How much is your monthly gross income?')));
+		}
+
+		// if we've come this far, then we simply defer to Lex
+		callback(delegate(outputSessionAttributes, slots));
+		return;
+	}
+
+	callback(close(outputSessionAttributes, 'Fulfilled', {
+		contentType: 'PlainText',
+		content: `Great!  Your loan application will be processed and you will be informed very soon.  Thanks for using Jack Sparrow!`
+	}));
+}
+
+function getHelp(intentRequest, callback) {
+	const outputSessionAttributes = intentRequest.sessionAttributes;
+
+	callback(close(outputSessionAttributes, 'Fulfilled', {
+		contentType: 'PlainText',
+		content: 'Welcome to Jack Sparrow loan assistant.  How can I help you?' 
+	}));
+
+}
+
 // --------------- Intents -----------------------
 
 /**
@@ -144,10 +201,19 @@ function dispatch(intentRequest, callback) {
 	const name = intentRequest.currentIntent.name;
 
 	// dispatch to the intent handlers
-	if (name === 'cafeOrderBeverageIntent') {
-		return orderBeverage(intentRequest, callback);
+	switch(name) {
+		case 'fiuHelpIntent':
+			return getHelp(intentRequest, callback);
+			break;
+
+		case 'fiuApplyLoanIntent':
+			return applyLoan(intentRequest, callback);
+			break;
+
+		default:
+			throw new Error(`Intent with name ${name} not supported`);
 	}
-	throw new Error(`Intent with name ${name} not supported`);
+
 }
 
 // --------------- Main handler -----------------------
