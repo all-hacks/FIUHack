@@ -1,5 +1,10 @@
 'use strict';
 
+const PAGE_TOKEN = process.env.PAGE_TOKEN;
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+
+const https = require('https');
+
 /*
 	Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 	Licensed under the Amazon Software License (the "License"). You may not use this file except
@@ -85,53 +90,6 @@ function buildMessage(messageContent) {
 
 // --------------- Functions that control the skill's behavior -----------------------
 
-/**
- * Performs dialog management and fulfillment for ordering a beverage.
- * (we only support ordering a mocha for now)
- */
-function orderBeverage(intentRequest, callback) {
-
-	const outputSessionAttributes = intentRequest.sessionAttributes;
-	const source = intentRequest.invocationSource;
-
-	if (source === 'DialogCodeHook') {
-
-		// perform validation on the slot values we have
-		const slots = intentRequest.currentIntent.slots;
-
-		const beverageType = (slots.BeverageType ? slots.BeverageType : null);
-		const beverageSize = (slots.BeverageSize ? slots.BeverageSize : null);
-		const beverageTemp = (slots.BeverageTemp ? slots.BeverageTemp : null);
-
-		if (! (beverageType && (beverageType === 'mocha'))) {
-
-			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
-				slots, 'BeverageType', buildMessage('Sorry, but we can only make a mocha2 today.  What kind of beverage would you like?')));
-		}
-
-		// let's assume we only accept short, tall, grande, venti, small, medium, and large for now
-		if (! (beverageSize && beverageSize.match(/short|tall|grande|venti|small|medium|large/))) {
-			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
-				slots, 'BeverageSize'));
-		}
-
-		// let's say we need to know temperature for mochas
-		if (! (beverageTemp && beverageTemp.match(/kids|hot|iced/))) {
-			callback(elicitSlot(outputSessionAttributes, intentRequest.currentIntent.name,
-				slots, 'BeverageTemp'));
-		}
-
-		// if we've come this far, then we simply defer to Lex
-		callback(delegate(outputSessionAttributes, slots));
-		return;
-	}
-
-	callback(close(outputSessionAttributes, 'Fulfilled', {
-		contentType: 'PlainText',
-		content: `Great!  Your mocha will be available for pickup soon.  Thanks for using CoffeeBot!`
-	}));
-}
-
 
 function applyLoan(intentRequest, callback) {
 
@@ -176,7 +134,8 @@ function applyLoan(intentRequest, callback) {
 	callback(close(outputSessionAttributes, 'Fulfilled', {
 		contentType: 'PlainText',
 		content: `Great!  Your loan application will be processed and you will be informed very soon.  Thanks for using Jack Sparrow!`
-	}));
+	}
+	));
 }
 
 function getHelp(intentRequest, callback) {
@@ -189,6 +148,39 @@ function getHelp(intentRequest, callback) {
 
 }
 
+function getSenderProfile(senderId) {
+  return new Promise(function(resolve, reject) {
+    var fields = 'fields=first_name,last_name,locale,gender,profile_pic';
+    var path = '/v2.6/' + senderId + '?' + fields +
+      '&access_token=' + PAGE_TOKEN;
+    var options = {
+      host: "graph.facebook.com",
+      path: path,
+      method: 'GET'
+    };
+ 
+    var callback = function(response) {
+      if (response.statusCode != 200) {
+        reject(Error(response.statusMessage));
+      }
+      var d = [];
+      response.on('data', function (chunk) {
+        d.push(chunk);
+      });
+      response.on('end', function () {
+        console.log(JSON.parse(d.join('')));
+        resolve(JSON.parse(d.join('')));
+      });
+    };
+ 
+    var req = https.request(options, callback);
+    req.on('error', function(err) {
+      reject(err);
+    });
+    req.end();
+    console.log('Sent profile request');
+  });
+}
 // --------------- Intents -----------------------
 
 /**
@@ -197,6 +189,8 @@ function getHelp(intentRequest, callback) {
 function dispatch(intentRequest, callback) {
 
 	console.log(`dispatch userId=${intentRequest.userId}, intent=${intentRequest.currentIntent.name}`);
+
+	getSenderProfile(intentRequest.userId);
 
 	const name = intentRequest.currentIntent.name;
 
