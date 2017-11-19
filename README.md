@@ -16,3 +16,8 @@ The Social Media ID can then be store in replacement for where traditional Ident
 
 # Screen captures 
 
+![alt text](http://url/to/img.png)
+![alt text](http://url/to/img.png)
+![alt text](http://url/to/img.png)
+![alt text](http://url/to/img.png)
+
