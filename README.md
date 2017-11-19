@@ -18,8 +18,11 @@ The Social Media ID can then be store in replacement for where traditional Ident
 # Import links
 
 1. Facebook chatbot link: [Jack Sparrow](https://www.facebook.com/JackSparrow-393951151023726/), a loan assistant.  
-_This chatbot use AWS Lamnda and Lex as backend engine_
+
+_This chatbot use AWS Lamnda and Lex as backend engine.
+_
 _To test with this bot, please request your FB account to be added as tester for the app @ vincent.tsn@gmail.com__
+
 1. []()
 
 
