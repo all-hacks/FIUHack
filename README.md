@@ -17,12 +17,12 @@ The Social Media ID can then be store in replacement for where traditional Ident
 # Screen captures 
 
 
-<img src="https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png" width="250">
+<img src="https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png" width="400">
 
-<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_01.png" width="250">
+<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_01.png" width="400">
 
-<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_02.png" width="250">
+<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_02.png" width="400">
 
-<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_03.png" width="250">
+<img src="https://github.com/all-hacks/FIUHack/blob/master/images/conversation_03.png" width="400">
 
 
