@@ -21,7 +21,7 @@ Facebook chatbot link: [Jack Sparrow](https://www.facebook.com/JackSparrow-39395
 
 _This chatbot use AWS Lamnda and Lex as backend engine._
 
-_To test with this bot, please request your FB account to be added as tester for the app @ vincent.tsn@gmail.com__
+_To test with this bot, please request your FB account to be added as tester for the app from vincent.tsn@gmail.com__
 
 
 
