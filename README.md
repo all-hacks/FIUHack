@@ -16,7 +16,7 @@ The Social Media ID can then be store in replacement for where traditional Ident
 
 # Screen captures 
 
-![alt text](https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png =250x)
+![alt text](https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png | width=250)
 
 ![alt text](http://url/to/img.png)
 ![alt text](http://url/to/img.png)
