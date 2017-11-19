@@ -18,6 +18,8 @@ The Social Media ID can then be store in replacement for where traditional Ident
 
 ![alt text](https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png | width=250)
 
+<img src="https://github.com/all-hacks/FIUHack/blob/master/images/apppage.png" width="250">
+
 ![alt text](http://url/to/img.png)
 ![alt text](http://url/to/img.png)
 ![alt text](http://url/to/img.png)
